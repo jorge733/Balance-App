@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="description"
+    content="Balance - Tu presupuesto familiar, claro y al día"
+  >
+
+  <meta name="theme-color" content="#245c48">
+
+  <title>Balance | Presupuesto familiar</title>
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <!-- =====================================================
+       HEADER
+  ====================================================== -->
+
+  <header class="app-header">
+
+    <div class="brand">
+
+      <div class="brand-icon">
+        B
+      </div>
+
+      <div class="brand-text">
+
+        <h1>
+          Balance
+        </h1>
+
+        <p>
+          Tu presupuesto familiar, claro y al día.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="month-selector">
+
+      <button
+        id="previousMonth"
+        class="month-button"
+        type="button"
+        aria-label="Mes anterior"
+        title="Mes anterior"
+      >
+        ‹
+      </button>
+
+
+      <button
+        id="currentMonthButton"
+        class="current-month"
+        type="button"
+        title="Mes actual"
+      >
+
+        <span>
+          Presupuesto
+        </span>
+
+        <strong id="currentMonth">
+          Septiembre 2026
+        </strong>
+
+      </button>
+
+
+      <button
+        id="nextMonth"
+        class="month-button"
+        type="button"
+        aria-label="Mes siguiente"
+        title="Mes siguiente"
+      >
+        ›
+      </button>
+
+    </div>
+
+  </header>
+
+
+
+  <!-- =====================================================
+       CONTENIDO PRINCIPAL
+  ====================================================== -->
+
+  <main class="app-container">
+
+
+    <!-- ===================================================
+         MES VACÍO
+    ==================================================== -->
+
+    <section
+      id="emptyMonthSection"
+      class="empty-month-section"
+      hidden
+    >
+
+      <div class="empty-month-icon">
+        📅
+      </div>
+
+
+      <div class="empty-month-content">
+
+        <span class="section-eyebrow">
+          Nuevo mes
+        </span>
+
+        <h2 id="emptyMonthTitle">
+          Este mes todavía está vacío
+        </h2>
+
+        <p>
+          Puedes comenzar un presupuesto nuevo o copiar
+          los ingresos y gastos del mes anterior para
+          usarlos como base.
+        </p>
+
+      </div>
+
+
+      <div class="empty-month-actions">
+
+        <button
+          id="copyPreviousMonth"
+          class="primary-button"
+          type="button"
+        >
+          Copiar mes anterior
+        </button>
+
+        <button
+          id="startEmptyMonth"
+          class="secondary-button"
+          type="button"
+        >
+          Comenzar desde cero
+        </button>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- ===================================================
+         RESUMEN
+    ==================================================== -->
+
+    <section class="summary-section">
+
+      <!-- INGRESOS -->
+
+      <article class="summary-card income-card">
+
+        <span class="summary-label">
+          Ingresos
+        </span>
+
+        <strong
+          id="totalIncome"
+          class="summary-value"
+        >
+          $0
+        </strong>
+
+        <span class="summary-detail">
+          Total del mes
+        </span>
+
+      </article>
+
+
+      <!-- GASTOS -->
+
+      <article class="summary-card expense-card">
+
+        <span class="summary-label">
+          Gastos
+        </span>
+
+        <strong
+          id="totalExpenses"
+          class="summary-value"
+        >
+          $0
+        </strong>
+
+        <span class="summary-detail">
+          Gastos registrados
+        </span>
+
+      </article>
+
+
+      <!-- DISPONIBLE -->
+
+      <article class="summary-card balance-card">
+
+        <span class="summary-label">
+          Disponible
+        </span>
+
+        <strong
+          id="availableBalance"
+          class="summary-value"
+        >
+          $0
+        </strong>
+
+        <span class="summary-detail">
+          Para el resto del mes
+        </span>
+
+      </article>
+
+    </section>
+
+
+
+    <!-- ===================================================
+         ESTADO DEL PRESUPUESTO
+    ==================================================== -->
+
+    <section class="budget-status">
+
+      <div class="budget-status-header">
+
+        <div>
+
+          <span class="section-eyebrow">
+            Estado del presupuesto
+          </span>
+
+          <h2 id="budgetMessage">
+            Comienza agregando tus ingresos
+          </h2>
+
+        </div>
+
+
+        <strong id="budgetPercentage">
+          0%
+        </strong>
+
+      </div>
+
+
+      <div
+        class="progress-track"
+        aria-hidden="true"
+      >
+
+        <div
+          id="budgetProgress"
+          class="progress-bar"
+        ></div>
+
+      </div>
+
+
+      <div class="budget-status-footer">
+
+        <span>
+          Gastado
+          <strong id="spentAmount">
+            $0
+          </strong>
+        </span>
+
+
+        <span>
+          Disponible
+          <strong id="remainingAmount">
+            $0
+          </strong>
+        </span>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- ===================================================
+         GRID INGRESOS / GASTOS
+    ==================================================== -->
+
+    <div class="main-grid">
+
+
+      <!-- =================================================
+           INGRESOS
+      ================================================== -->
+
+      <section class="panel">
+
+        <div class="panel-header">
+
+          <div>
+
+            <span class="section-eyebrow">
+              Este mes
+            </span>
+
+            <h2>
+              Ingresos
+            </h2>
+
+          </div>
+
+
+          <button
+            id="openIncomeModal"
+            class="primary-button"
+            type="button"
+          >
+            + Agregar
+          </button>
+
+        </div>
+
+
+        <div
+          id="incomeList"
+          class="transaction-list"
+        >
+
+          <div class="empty-state">
+
+            <div class="empty-icon">
+              ＋
+            </div>
+
+            <h3>
+              Aún no hay ingresos
+            </h3>
+
+            <p>
+              Agrega sueldos, bonos, arriendos
+              u otros ingresos del mes.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="panel-total">
+
+          <span>
+            Total ingresos
+          </span>
+
+          <strong id="incomePanelTotal">
+            $0
+          </strong>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- =================================================
+           GASTOS
+      ================================================== -->
+
+      <section class="panel">
+
+        <div class="panel-header">
+
+          <div>
+
+            <span class="section-eyebrow">
+              Este mes
+            </span>
+
+            <h2>
+              Gastos
+            </h2>
+
+          </div>
+
+
+          <button
+            id="openExpenseModal"
+            class="primary-button"
+            type="button"
+          >
+            + Agregar
+          </button>
+
+        </div>
+
+
+
+        <!-- FILTROS -->
+
+        <div class="category-filters">
+
+          <button
+            class="filter-button active"
+            data-category="Todos"
+            type="button"
+          >
+            Todos
+          </button>
+
+          <button
+            class="filter-button"
+            data-category="Depto"
+            type="button"
+          >
+            🏢 Depto
+          </button>
+
+          <button
+            class="filter-button"
+            data-category="Casa"
+            type="button"
+          >
+            🏠 Casa
+          </button>
+
+          <button
+            class="filter-button"
+            data-category="Parcela"
+            type="button"
+          >
+            🌿 Parcela
+          </button>
+
+          <button
+            class="filter-button"
+            data-category="Otros"
+            type="button"
+          >
+            🧾 Otros
+          </button>
+
+        </div>
+
+
+
+        <div
+          id="expenseList"
+          class="transaction-list"
+        >
+
+          <div class="empty-state">
+
+            <div class="empty-icon">
+              ＋
+            </div>
+
+            <h3>
+              Aún no hay gastos
+            </h3>
+
+            <p>
+              Registra los gastos del mes para saber
+              cuánto dinero queda disponible.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="panel-total">
+
+          <span>
+            Total gastos
+          </span>
+
+          <strong id="expensePanelTotal">
+            $0
+          </strong>
+
+        </div>
+
+      </section>
+
+    </div>
+
+
+
+    <!-- ===================================================
+         DISTRIBUCIÓN POR CATEGORÍA
+    ==================================================== -->
+
+    <section class="category-summary-section">
+
+      <div class="section-header">
+
+        <div>
+
+          <span class="section-eyebrow">
+            Distribución
+          </span>
+
+          <h2>
+            Gastos por categoría
+          </h2>
+
+        </div>
+
+      </div>
+
+
+      <div class="category-summary-grid">
+
+
+        <!-- DEPTO -->
+
+        <article class="category-card">
+
+          <div class="category-icon">
+            🏢
+          </div>
+
+          <div>
+
+            <span>
+              Depto
+            </span>
+
+            <strong id="totalDepto">
+              $0
+            </strong>
+
+          </div>
+
+        </article>
+
+
+
+        <!-- CASA -->
+
+        <article class="category-card">
+
+          <div class="category-icon">
+            🏠
+          </div>
+
+          <div>
+
+            <span>
+              Casa
+            </span>
+
+            <strong id="totalCasa">
+              $0
+            </strong>
+
+          </div>
+
+        </article>
+
+
+
+        <!-- PARCELA -->
+
+        <article class="category-card">
+
+          <div class="category-icon">
+            🌿
+          </div>
+
+          <div>
+
+            <span>
+              Parcela
+            </span>
+
+            <strong id="totalParcela">
+              $0
+            </strong>
+
+          </div>
+
+        </article>
+
+
+
+        <!-- OTROS -->
+
+        <article class="category-card">
+
+          <div class="category-icon">
+            🧾
+          </div>
+
+          <div>
+
+            <span>
+              Otros
+            </span>
+
+            <strong id="totalOtros">
+              $0
+            </strong>
+
+          </div>
+
+        </article>
+
+      </div>
+
+    </section>
+
+
+    <!-- ===================================================
+         ACCIONES DEL MES
+    ==================================================== -->
+
+    <section class="month-tools">
+
+      <div>
+
+        <span class="section-eyebrow">
+          Presupuesto
+        </span>
+
+        <h2>
+          Acciones del mes
+        </h2>
+
+        <p>
+          Utiliza el presupuesto actual como base para
+          organizar los meses siguientes.
+        </p>
+
+      </div>
+
+
+      <button
+        id="copyMonthButton"
+        class="secondary-button"
+        type="button"
+      >
+        Copiar mes anterior
+      </button>
+
+    </section>
+
+  </main>
+
+
+
+  <!-- =====================================================
+       MODAL INGRESO
+  ====================================================== -->
+
+  <div
+    id="incomeModal"
+    class="modal"
+    aria-hidden="true"
+  >
+
+    <div
+      class="modal-backdrop"
+      data-close-modal
+    ></div>
+
+
+    <div
+      class="modal-dialog"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="incomeModalTitle"
+    >
+
+      <div class="modal-header">
+
+        <div>
+
+          <span
+            id="incomeModalEyebrow"
+            class="section-eyebrow"
+          >
+            Nuevo registro
+          </span>
+
+          <h2 id="incomeModalTitle">
+            Agregar ingreso
+          </h2>
+
+        </div>
+
+
+        <button
+          class="close-button"
+          type="button"
+          data-close-modal
+          aria-label="Cerrar"
+        >
+          ×
+        </button>
+
+      </div>
+
+
+
+      <form id="incomeForm">
+
+        <input
+          id="incomeEditId"
+          type="hidden"
+          value=""
+        >
+
+
+        <!-- DESCRIPCIÓN -->
+
+        <div class="form-group">
+
+          <label for="incomeName">
+            Descripción
+          </label>
+
+          <input
+            id="incomeName"
+            name="incomeName"
+            type="text"
+            placeholder="Ej: Sueldo, bono, arriendo..."
+            autocomplete="off"
+            required
+          >
+
+        </div>
+
+
+
+        <!-- MONTO -->
+
+        <div class="form-group">
+
+          <label for="incomeAmount">
+            Monto
+          </label>
+
+          <div class="money-input">
+
+            <span>
+              $
+            </span>
+
+            <input
+              id="incomeAmount"
+              name="incomeAmount"
+              type="number"
+              min="0"
+              step="1"
+              inputmode="numeric"
+              placeholder="0"
+              required
+            >
+
+          </div>
+
+        </div>
+
+
+
+        <!-- ACCIONES -->
+
+        <div class="modal-actions">
+
+          <button
+            class="secondary-button"
+            type="button"
+            data-close-modal
+          >
+            Cancelar
+          </button>
+
+
+          <button
+            id="saveIncomeButton"
+            class="primary-button"
+            type="submit"
+          >
+            Guardar ingreso
+          </button>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- =====================================================
+       MODAL GASTO
+  ====================================================== -->
+
+  <div
+    id="expenseModal"
+    class="modal"
+    aria-hidden="true"
+  >
+
+    <div
+      class="modal-backdrop"
+      data-close-modal
+    ></div>
+
+
+    <div
+      class="modal-dialog"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="expenseModalTitle"
+    >
+
+      <div class="modal-header">
+
+        <div>
+
+          <span
+            id="expenseModalEyebrow"
+            class="section-eyebrow"
+          >
+            Nuevo registro
+          </span>
+
+          <h2 id="expenseModalTitle">
+            Agregar gasto
+          </h2>
+
+        </div>
+
+
+        <button
+          class="close-button"
+          type="button"
+          data-close-modal
+          aria-label="Cerrar"
+        >
+          ×
+        </button>
+
+      </div>
+
+
+
+      <form id="expenseForm">
+
+        <input
+          id="expenseEditId"
+          type="hidden"
+          value=""
+        >
+
+
+        <!-- DESCRIPCIÓN -->
+
+        <div class="form-group">
+
+          <label for="expenseName">
+            Descripción
+          </label>
+
+          <input
+            id="expenseName"
+            name="expenseName"
+            type="text"
+            placeholder="Ej: Luz, agua, dividendo..."
+            autocomplete="off"
+            required
+          >
+
+        </div>
+
+
+
+        <!-- GASTOS HABITUALES -->
+
+        <div class="form-group">
+
+          <label for="usualExpense">
+            Gasto habitual
+          </label>
+
+          <select
+            id="usualExpense"
+            name="usualExpense"
+          >
+
+            <option value="">
+              Seleccionar...
+            </option>
+
+            <option value="Dividendo">
+              Dividendo
+            </option>
+
+            <option value="Gastos comunes">
+              Gastos comunes
+            </option>
+
+            <option value="Contribuciones">
+              Contribuciones
+            </option>
+
+            <option value="Luz">
+              Luz
+            </option>
+
+            <option value="Agua">
+              Agua
+            </option>
+
+            <option value="Gas">
+              Gas
+            </option>
+
+            <option value="Pellet">
+              Pellet
+            </option>
+
+            <option value="Colegio">
+              Colegio
+            </option>
+
+            <option value="Nana">
+              Nana
+            </option>
+
+            <option value="Celulares">
+              Celulares
+            </option>
+
+            <option value="Internet">
+              Internet
+            </option>
+
+            <option value="Bencina / TAG">
+              Bencina / TAG
+            </option>
+
+            <option value="Comida">
+              Comida
+            </option>
+
+            <option value="Seguros">
+              Seguros
+            </option>
+
+            <option value="Auto">
+              Auto
+            </option>
+
+            <option value="Jardinero">
+              Jardinero
+            </option>
+
+            <option value="Clases">
+              Clases
+            </option>
+
+            <option value="Vacaciones">
+              Vacaciones
+            </option>
+
+            <option value="Salidas a comer">
+              Salidas a comer
+            </option>
+
+            <option value="Dentista">
+              Dentista
+            </option>
+
+            <option value="Doctores">
+              Doctores
+            </option>
+
+            <option value="Calefacción">
+              Calefacción
+            </option>
+
+          </select>
+
+          <small class="form-help">
+            Puedes elegir un gasto habitual o escribir
+            una descripción personalizada arriba.
+          </small>
+
+        </div>
+
+
+
+        <!-- CATEGORÍA -->
+
+        <div class="form-group">
+
+          <label for="expenseCategory">
+            Categoría
+          </label>
+
+          <select
+            id="expenseCategory"
+            name="expenseCategory"
+            required
+          >
+
+            <option value="Casa">
+              Casa
+            </option>
+
+            <option value="Depto">
+              Depto
+            </option>
+
+            <option value="Parcela">
+              Parcela
+            </option>
+
+            <option value="Otros">
+              Otros
+            </option>
+
+          </select>
+
+        </div>
+
+
+
+        <!-- MONTO -->
+
+        <div class="form-group">
+
+          <label for="expenseAmount">
+            Monto
+          </label>
+
+          <div class="money-input">
+
+            <span>
+              $
+            </span>
+
+            <input
+              id="expenseAmount"
+              name="expenseAmount"
+              type="number"
+              min="0"
+              step="1"
+              inputmode="numeric"
+              placeholder="0"
+              required
+            >
+
+          </div>
+
+        </div>
+
+
+
+        <!-- ACCIONES -->
+
+        <div class="modal-actions">
+
+          <button
+            class="secondary-button"
+            type="button"
+            data-close-modal
+          >
+            Cancelar
+          </button>
+
+
+          <button
+            id="saveExpenseButton"
+            class="primary-button"
+            type="submit"
+          >
+            Guardar gasto
+          </button>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- =====================================================
+       MODAL COPIAR MES
+  ====================================================== -->
+
+  <div
+    id="copyMonthModal"
+    class="modal"
+    aria-hidden="true"
+  >
+
+    <div
+      class="modal-backdrop"
+      data-close-modal
+    ></div>
+
+
+    <div
+      class="modal-dialog small-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="copyMonthTitle"
+    >
+
+      <div class="modal-header">
+
+        <div>
+
+          <span class="section-eyebrow">
+            Nuevo presupuesto
+          </span>
+
+          <h2 id="copyMonthTitle">
+            Copiar mes anterior
+          </h2>
+
+        </div>
+
+
+        <button
+          class="close-button"
+          type="button"
+          data-close-modal
+          aria-label="Cerrar"
+        >
+          ×
+        </button>
+
+      </div>
+
+
+      <div class="copy-month-content">
+
+        <div class="copy-month-icon">
+          📋
+        </div>
+
+        <p id="copyMonthMessage">
+          Se copiarán los ingresos y gastos del mes
+          anterior como base para este presupuesto.
+        </p>
+
+
+        <div class="copy-options">
+
+          <label class="check-option">
+
+            <input
+              id="copyIncomes"
+              type="checkbox"
+              checked
+            >
+
+            <span>
+
+              <strong>
+                Copiar ingresos
+              </strong>
+
+              <small>
+                Sueldos, bonos, arriendos y otros.
+              </small>
+
+            </span>
+
+          </label>
+
+
+          <label class="check-option">
+
+            <input
+              id="copyExpenses"
+              type="checkbox"
+              checked
+            >
+
+            <span>
+
+              <strong>
+                Copiar gastos
+              </strong>
+
+              <small>
+                Usa los gastos anteriores como base.
+              </small>
+
+            </span>
+
+          </label>
+
+        </div>
+
+      </div>
+
+
+      <div class="modal-actions">
+
+        <button
+          class="secondary-button"
+          type="button"
+          data-close-modal
+        >
+          Cancelar
+        </button>
+
+
+        <button
+          id="confirmCopyMonth"
+          class="primary-button"
+          type="button"
+        >
+          Copiar presupuesto
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- =====================================================
+       TOAST
+  ====================================================== -->
+
+  <div
+    id="toast"
+    class="toast"
+    role="status"
+    aria-live="polite"
+  ></div>
+
+
+
+  <!-- =====================================================
+       JAVASCRIPT
+  ====================================================== -->
+
+  <script src="app.js"></script>
+
+</body>
+</html>
