@@ -17,7 +17,7 @@
 
   <title>Balance | Presupuesto familiar</title>
 
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=1.2.0">
 </head>
 
 <body>
@@ -36,9 +36,7 @@
 
       <div class="brand-text">
 
-        <h1>
-          Balance
-        </h1>
+        <h1>Balance</h1>
 
         <p>
           Tu presupuesto familiar, claro y al día.
@@ -49,6 +47,62 @@
     </div>
 
 
+    <nav
+      class="main-navigation"
+      aria-label="Navegación principal"
+    >
+
+      <button
+        class="nav-button active"
+        data-view="home"
+        type="button"
+      >
+        Inicio
+      </button>
+
+      <button
+        class="nav-button"
+        data-view="incomes"
+        type="button"
+      >
+        Ingresos
+      </button>
+
+      <button
+        class="nav-button"
+        data-view="expenses"
+        type="button"
+      >
+        Gastos
+      </button>
+
+      <button
+        class="nav-button"
+        data-view="debts"
+        type="button"
+      >
+        Deudas
+      </button>
+
+      <button
+        class="nav-button"
+        data-view="goals"
+        type="button"
+      >
+        Metas
+      </button>
+
+      <button
+        class="nav-button"
+        data-view="history"
+        type="button"
+      >
+        Historial
+      </button>
+
+    </nav>
+
+
     <div class="month-selector">
 
       <button
@@ -56,7 +110,6 @@
         class="month-button"
         type="button"
         aria-label="Mes anterior"
-        title="Mes anterior"
       >
         ‹
       </button>
@@ -66,12 +119,10 @@
         id="currentMonthButton"
         class="current-month"
         type="button"
-        title="Mes actual"
+        title="Volver al mes actual"
       >
 
-        <span>
-          Presupuesto
-        </span>
+        <span>Presupuesto</span>
 
         <strong id="currentMonth">
           Septiembre 2026
@@ -85,7 +136,6 @@
         class="month-button"
         type="button"
         aria-label="Mes siguiente"
-        title="Mes siguiente"
       >
         ›
       </button>
@@ -97,282 +147,70 @@
 
 
   <!-- =====================================================
-       CONTENIDO PRINCIPAL
+       CONTENIDO
   ====================================================== -->
 
   <main class="app-container">
 
 
     <!-- ===================================================
-         MES VACÍO
+         INICIO
     ==================================================== -->
 
-    <section
-      id="emptyMonthSection"
-      class="empty-month-section"
-      hidden
+    <div
+      id="homeView"
+      class="app-view active"
+      data-app-view="home"
     >
 
-      <div class="empty-month-icon">
-        📅
-      </div>
+      <!-- MES VACÍO -->
+
+      <section
+        id="emptyMonthSection"
+        class="empty-month-section"
+        hidden
+      >
+
+        <div class="empty-month-icon">
+          📅
+        </div>
 
 
-      <div class="empty-month-content">
-
-        <span class="section-eyebrow">
-          Nuevo mes
-        </span>
-
-        <h2 id="emptyMonthTitle">
-          Este mes todavía está vacío
-        </h2>
-
-        <p>
-          Puedes comenzar un presupuesto nuevo o copiar
-          los ingresos y gastos del mes anterior para
-          usarlos como base.
-        </p>
-
-      </div>
-
-
-      <div class="empty-month-actions">
-
-        <button
-          id="copyPreviousMonth"
-          class="primary-button"
-          type="button"
-        >
-          Copiar mes anterior
-        </button>
-
-        <button
-          id="startEmptyMonth"
-          class="secondary-button"
-          type="button"
-        >
-          Comenzar desde cero
-        </button>
-
-      </div>
-
-    </section>
-
-
-
-    <!-- ===================================================
-         RESUMEN
-    ==================================================== -->
-
-    <section class="summary-section">
-
-      <!-- INGRESOS -->
-
-      <article class="summary-card income-card">
-
-        <span class="summary-label">
-          Ingresos
-        </span>
-
-        <strong
-          id="totalIncome"
-          class="summary-value"
-        >
-          $0
-        </strong>
-
-        <span class="summary-detail">
-          Total del mes
-        </span>
-
-      </article>
-
-
-      <!-- GASTOS -->
-
-      <article class="summary-card expense-card">
-
-        <span class="summary-label">
-          Gastos
-        </span>
-
-        <strong
-          id="totalExpenses"
-          class="summary-value"
-        >
-          $0
-        </strong>
-
-        <span class="summary-detail">
-          Gastos registrados
-        </span>
-
-      </article>
-
-
-      <!-- DISPONIBLE -->
-
-      <article class="summary-card balance-card">
-
-        <span class="summary-label">
-          Disponible
-        </span>
-
-        <strong
-          id="availableBalance"
-          class="summary-value"
-        >
-          $0
-        </strong>
-
-        <span class="summary-detail">
-          Para el resto del mes
-        </span>
-
-      </article>
-
-    </section>
-
-
-
-    <!-- ===================================================
-         ESTADO DEL PRESUPUESTO
-    ==================================================== -->
-
-    <section class="budget-status">
-
-      <div class="budget-status-header">
-
-        <div>
+        <div class="empty-month-content">
 
           <span class="section-eyebrow">
-            Estado del presupuesto
+            Nuevo mes
           </span>
 
-          <h2 id="budgetMessage">
-            Comienza agregando tus ingresos
+          <h2 id="emptyMonthTitle">
+            Este mes todavía está vacío
           </h2>
+
+          <p>
+            Puedes comenzar un presupuesto nuevo o copiar
+            los ingresos y gastos del mes anterior.
+          </p>
 
         </div>
 
 
-        <strong id="budgetPercentage">
-          0%
-        </strong>
-
-      </div>
-
-
-      <div
-        class="progress-track"
-        aria-hidden="true"
-      >
-
-        <div
-          id="budgetProgress"
-          class="progress-bar"
-        ></div>
-
-      </div>
-
-
-      <div class="budget-status-footer">
-
-        <span>
-          Gastado
-          <strong id="spentAmount">
-            $0
-          </strong>
-        </span>
-
-
-        <span>
-          Disponible
-          <strong id="remainingAmount">
-            $0
-          </strong>
-        </span>
-
-      </div>
-
-    </section>
-
-
-
-    <!-- ===================================================
-         GRID INGRESOS / GASTOS
-    ==================================================== -->
-
-    <div class="main-grid">
-
-
-      <!-- =================================================
-           INGRESOS
-      ================================================== -->
-
-      <section class="panel">
-
-        <div class="panel-header">
-
-          <div>
-
-            <span class="section-eyebrow">
-              Este mes
-            </span>
-
-            <h2>
-              Ingresos
-            </h2>
-
-          </div>
-
+        <div class="empty-month-actions">
 
           <button
-            id="openIncomeModal"
+            id="copyPreviousMonth"
             class="primary-button"
             type="button"
           >
-            + Agregar
+            Copiar mes anterior
           </button>
 
-        </div>
-
-
-        <div
-          id="incomeList"
-          class="transaction-list"
-        >
-
-          <div class="empty-state">
-
-            <div class="empty-icon">
-              ＋
-            </div>
-
-            <h3>
-              Aún no hay ingresos
-            </h3>
-
-            <p>
-              Agrega sueldos, bonos, arriendos
-              u otros ingresos del mes.
-            </p>
-
-          </div>
-
-        </div>
-
-
-        <div class="panel-total">
-
-          <span>
-            Total ingresos
-          </span>
-
-          <strong id="incomePanelTotal">
-            $0
-          </strong>
+          <button
+            id="startEmptyMonth"
+            class="secondary-button"
+            type="button"
+          >
+            Comenzar desde cero
+          </button>
 
         </div>
 
@@ -380,42 +218,539 @@
 
 
 
-      <!-- =================================================
-           GASTOS
-      ================================================== -->
+      <!-- RESUMEN -->
 
-      <section class="panel">
+      <section class="summary-section">
 
-        <div class="panel-header">
+        <article class="summary-card income-card">
+
+          <span class="summary-label">
+            Ingresos
+          </span>
+
+          <strong
+            id="totalIncome"
+            class="summary-value"
+          >
+            $0
+          </strong>
+
+          <span class="summary-detail">
+            Total del mes
+          </span>
+
+        </article>
+
+
+        <article class="summary-card expense-card">
+
+          <span class="summary-label">
+            Gastos
+          </span>
+
+          <strong
+            id="totalExpenses"
+            class="summary-value"
+          >
+            $0
+          </strong>
+
+          <span class="summary-detail">
+            Gastos registrados
+          </span>
+
+        </article>
+
+
+        <article class="summary-card balance-card">
+
+          <span class="summary-label">
+            Disponible
+          </span>
+
+          <strong
+            id="availableBalance"
+            class="summary-value"
+          >
+            $0
+          </strong>
+
+          <span class="summary-detail">
+            Para el resto del mes
+          </span>
+
+        </article>
+
+      </section>
+
+
+
+      <!-- ESTADO -->
+
+      <section class="budget-status">
+
+        <div class="budget-status-header">
 
           <div>
 
             <span class="section-eyebrow">
-              Este mes
+              Estado del presupuesto
             </span>
 
-            <h2>
-              Gastos
+            <h2 id="budgetMessage">
+              Comienza agregando tus ingresos
             </h2>
 
           </div>
 
-
-          <button
-            id="openExpenseModal"
-            class="primary-button"
-            type="button"
-          >
-            + Agregar
-          </button>
+          <strong id="budgetPercentage">
+            0%
+          </strong>
 
         </div>
 
 
+        <div
+          class="progress-track"
+          aria-hidden="true"
+        >
 
-        <!-- FILTROS -->
+          <div
+            id="budgetProgress"
+            class="progress-bar"
+          ></div>
 
-        <div class="category-filters">
+        </div>
+
+
+        <div class="budget-status-footer">
+
+          <span>
+            Gastado
+            <strong id="spentAmount">
+              $0
+            </strong>
+          </span>
+
+          <span>
+            Disponible
+            <strong id="remainingAmount">
+              $0
+            </strong>
+          </span>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- INGRESOS + GASTOS -->
+
+      <div class="main-grid">
+
+        <!-- INGRESOS -->
+
+        <section class="panel">
+
+          <div class="panel-header">
+
+            <div>
+
+              <span class="section-eyebrow">
+                Este mes
+              </span>
+
+              <h2>Ingresos</h2>
+
+            </div>
+
+            <button
+              id="openIncomeModal"
+              class="primary-button"
+              type="button"
+            >
+              + Agregar
+            </button>
+
+          </div>
+
+
+          <div
+            id="incomeList"
+            class="transaction-list"
+          ></div>
+
+
+          <div class="panel-total">
+
+            <span>
+              Total ingresos
+            </span>
+
+            <strong id="incomePanelTotal">
+              $0
+            </strong>
+
+          </div>
+
+        </section>
+
+
+
+        <!-- GASTOS -->
+
+        <section class="panel">
+
+          <div class="panel-header">
+
+            <div>
+
+              <span class="section-eyebrow">
+                Este mes
+              </span>
+
+              <h2>Gastos</h2>
+
+            </div>
+
+            <button
+              id="openExpenseModal"
+              class="primary-button"
+              type="button"
+            >
+              + Agregar
+            </button>
+
+          </div>
+
+
+          <div class="category-filters">
+
+            <button
+              class="filter-button active"
+              data-category="Todos"
+              type="button"
+            >
+              Todos
+            </button>
+
+            <button
+              class="filter-button"
+              data-category="Depto"
+              type="button"
+            >
+              🏢 Depto
+            </button>
+
+            <button
+              class="filter-button"
+              data-category="Casa"
+              type="button"
+            >
+              🏠 Casa
+            </button>
+
+            <button
+              class="filter-button"
+              data-category="Parcela"
+              type="button"
+            >
+              🌿 Parcela
+            </button>
+
+            <button
+              class="filter-button"
+              data-category="Otros"
+              type="button"
+            >
+              🧾 Otros
+            </button>
+
+          </div>
+
+
+          <div
+            id="expenseList"
+            class="transaction-list"
+          ></div>
+
+
+          <div class="panel-total">
+
+            <span>
+              Total gastos
+            </span>
+
+            <strong id="expensePanelTotal">
+              $0
+            </strong>
+
+          </div>
+
+        </section>
+
+      </div>
+
+
+
+      <!-- DISTRIBUCIÓN -->
+
+      <section class="category-summary-section">
+
+        <div class="section-header">
+
+          <div>
+
+            <span class="section-eyebrow">
+              Distribución
+            </span>
+
+            <h2>
+              Gastos por categoría
+            </h2>
+
+          </div>
+
+        </div>
+
+
+        <div class="category-summary-grid">
+
+          <article class="category-card">
+
+            <div class="category-icon">
+              🏢
+            </div>
+
+            <div>
+
+              <span>Depto</span>
+
+              <strong id="totalDepto">
+                $0
+              </strong>
+
+            </div>
+
+          </article>
+
+
+          <article class="category-card">
+
+            <div class="category-icon">
+              🏠
+            </div>
+
+            <div>
+
+              <span>Casa</span>
+
+              <strong id="totalCasa">
+                $0
+              </strong>
+
+            </div>
+
+          </article>
+
+
+          <article class="category-card">
+
+            <div class="category-icon">
+              🌿
+            </div>
+
+            <div>
+
+              <span>Parcela</span>
+
+              <strong id="totalParcela">
+                $0
+              </strong>
+
+            </div>
+
+          </article>
+
+
+          <article class="category-card">
+
+            <div class="category-icon">
+              🧾
+            </div>
+
+            <div>
+
+              <span>Otros</span>
+
+              <strong id="totalOtros">
+                $0
+              </strong>
+
+            </div>
+
+          </article>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- ACCIONES MES -->
+
+      <section class="month-tools">
+
+        <div>
+
+          <span class="section-eyebrow">
+            Presupuesto
+          </span>
+
+          <h2>
+            Acciones del mes
+          </h2>
+
+          <p>
+            Utiliza el presupuesto anterior como base
+            para organizar el mes seleccionado.
+          </p>
+
+        </div>
+
+        <button
+          id="copyMonthButton"
+          class="secondary-button"
+          type="button"
+        >
+          Copiar mes anterior
+        </button>
+
+      </section>
+
+    </div>
+
+
+
+    <!-- ===================================================
+         VISTA INGRESOS
+    ==================================================== -->
+
+    <div
+      id="incomesView"
+      class="app-view"
+      data-app-view="incomes"
+    >
+
+      <div class="view-heading">
+
+        <div>
+
+          <span class="section-eyebrow">
+            Presupuesto mensual
+          </span>
+
+          <h2>Ingresos</h2>
+
+          <p>
+            Sueldos, bonos, arriendos y otros ingresos
+            disponibles durante el mes.
+          </p>
+
+        </div>
+
+        <button
+          id="openIncomeModalFromView"
+          class="primary-button"
+          type="button"
+        >
+          + Agregar ingreso
+        </button>
+
+      </div>
+
+
+      <section class="detail-summary-card">
+
+        <span>
+          Ingresos del mes
+        </span>
+
+        <strong id="incomeViewTotal">
+          $0
+        </strong>
+
+      </section>
+
+
+      <section class="panel detail-panel">
+
+        <div
+          id="incomeViewList"
+          class="transaction-list detail-list"
+        ></div>
+
+      </section>
+
+    </div>
+
+
+
+    <!-- ===================================================
+         VISTA GASTOS
+    ==================================================== -->
+
+    <div
+      id="expensesView"
+      class="app-view"
+      data-app-view="expenses"
+    >
+
+      <div class="view-heading">
+
+        <div>
+
+          <span class="section-eyebrow">
+            Presupuesto mensual
+          </span>
+
+          <h2>Gastos</h2>
+
+          <p>
+            Revisa y administra todos los gastos del
+            mes seleccionado.
+          </p>
+
+        </div>
+
+        <button
+          id="openExpenseModalFromView"
+          class="primary-button"
+          type="button"
+        >
+          + Agregar gasto
+        </button>
+
+      </div>
+
+
+      <section class="detail-summary-card expense-detail">
+
+        <span>
+          Gastos del mes
+        </span>
+
+        <strong id="expenseViewTotal">
+          $0
+        </strong>
+
+      </section>
+
+
+      <section class="panel detail-panel">
+
+        <div class="category-filters detail-filters">
 
           <button
             class="filter-button active"
@@ -460,41 +795,158 @@
         </div>
 
 
-
         <div
-          id="expenseList"
-          class="transaction-list"
+          id="expenseViewList"
+          class="transaction-list detail-list"
+        ></div>
+
+      </section>
+
+    </div>
+
+
+
+    <!-- ===================================================
+         VISTA DEUDAS
+    ==================================================== -->
+
+    <div
+      id="debtsView"
+      class="app-view"
+      data-app-view="debts"
+    >
+
+      <div class="view-heading">
+
+        <div>
+
+          <span class="section-eyebrow">
+            Situación financiera
+          </span>
+
+          <h2>Deudas</h2>
+
+          <p>
+            Registra tarjetas, líneas de crédito,
+            créditos u otras obligaciones pendientes.
+          </p>
+
+        </div>
+
+
+        <button
+          id="openDebtModal"
+          class="primary-button"
+          type="button"
         >
+          + Agregar deuda
+        </button>
 
-          <div class="empty-state">
+      </div>
 
-            <div class="empty-icon">
-              ＋
-            </div>
 
-            <h3>
-              Aún no hay gastos
-            </h3>
 
-            <p>
-              Registra los gastos del mes para saber
-              cuánto dinero queda disponible.
-            </p>
+      <!-- RESUMEN DEUDAS -->
+
+      <section class="debt-summary-grid">
+
+        <article class="debt-summary-card">
+
+          <span>
+            Deuda total
+          </span>
+
+          <strong id="totalDebt">
+            $0
+          </strong>
+
+          <small>
+            Total pendiente
+          </small>
+
+        </article>
+
+
+        <article class="debt-summary-card">
+
+          <span>
+            Pago mensual
+          </span>
+
+          <strong id="totalDebtMonthlyPayment">
+            $0
+          </strong>
+
+          <small>
+            Compromiso mensual
+          </small>
+
+        </article>
+
+
+        <article class="debt-summary-card">
+
+          <span>
+            Deudas registradas
+          </span>
+
+          <strong id="debtCount">
+            0
+          </strong>
+
+          <small>
+            Obligaciones activas
+          </small>
+
+        </article>
+
+      </section>
+
+
+
+      <!-- LISTA DE DEUDAS -->
+
+      <section class="panel debt-panel">
+
+        <div class="panel-header">
+
+          <div>
+
+            <span class="section-eyebrow">
+              Obligaciones
+            </span>
+
+            <h2>
+              Deudas actuales
+            </h2>
 
           </div>
 
         </div>
 
 
-        <div class="panel-total">
+        <div
+          id="debtList"
+          class="debt-list"
+        >
 
-          <span>
-            Total gastos
-          </span>
+          <div class="empty-state">
 
-          <strong id="expensePanelTotal">
-            $0
-          </strong>
+            <div class="empty-icon">
+              ✓
+            </div>
+
+            <h3>
+              No hay deudas registradas
+            </h3>
+
+            <p>
+              Agrega tarjetas, líneas de crédito
+              u otras obligaciones para llevar
+              un control claro.
+            </p>
+
+          </div>
 
         </div>
 
@@ -505,163 +957,149 @@
 
 
     <!-- ===================================================
-         DISTRIBUCIÓN POR CATEGORÍA
+         VISTA METAS
     ==================================================== -->
 
-    <section class="category-summary-section">
+    <div
+      id="goalsView"
+      class="app-view"
+      data-app-view="goals"
+    >
 
-      <div class="section-header">
+      <div class="view-heading">
 
         <div>
 
           <span class="section-eyebrow">
-            Distribución
+            Objetivos familiares
           </span>
 
-          <h2>
-            Gastos por categoría
-          </h2>
+          <h2>Metas</h2>
+
+          <p>
+            Organiza los montos que necesitan reunir para proyectos, compras,
+            reparaciones, viajes u otros objetivos familiares.
+          </p>
 
         </div>
 
-      </div>
-
-
-      <div class="category-summary-grid">
-
-
-        <!-- DEPTO -->
-
-        <article class="category-card">
-
-          <div class="category-icon">
-            🏢
-          </div>
-
-          <div>
-
-            <span>
-              Depto
-            </span>
-
-            <strong id="totalDepto">
-              $0
-            </strong>
-
-          </div>
-
-        </article>
-
-
-
-        <!-- CASA -->
-
-        <article class="category-card">
-
-          <div class="category-icon">
-            🏠
-          </div>
-
-          <div>
-
-            <span>
-              Casa
-            </span>
-
-            <strong id="totalCasa">
-              $0
-            </strong>
-
-          </div>
-
-        </article>
-
-
-
-        <!-- PARCELA -->
-
-        <article class="category-card">
-
-          <div class="category-icon">
-            🌿
-          </div>
-
-          <div>
-
-            <span>
-              Parcela
-            </span>
-
-            <strong id="totalParcela">
-              $0
-            </strong>
-
-          </div>
-
-        </article>
-
-
-
-        <!-- OTROS -->
-
-        <article class="category-card">
-
-          <div class="category-icon">
-            🧾
-          </div>
-
-          <div>
-
-            <span>
-              Otros
-            </span>
-
-            <strong id="totalOtros">
-              $0
-            </strong>
-
-          </div>
-
-        </article>
+        <button
+          id="openGoalModal"
+          class="primary-button"
+          type="button"
+        >
+          + Agregar meta
+        </button>
 
       </div>
 
-    </section>
+
+      <!-- RESUMEN METAS -->
+
+      <section class="goal-summary-grid">
+
+        <article class="goal-summary-card">
+          <span>Metas registradas</span>
+          <strong id="goalCount">0</strong>
+          <small>Objetivos activos</small>
+        </article>
+
+        <article class="goal-summary-card">
+          <span>Objetivo total</span>
+          <strong id="totalGoalTarget">$0</strong>
+          <small>Total que quieren reunir</small>
+        </article>
+
+        <article class="goal-summary-card">
+          <span>Ahorrado</span>
+          <strong id="totalGoalSaved">$0</strong>
+          <small>Monto acumulado</small>
+        </article>
+
+        <article class="goal-summary-card">
+          <span>Pendiente</span>
+          <strong id="totalGoalRemaining">$0</strong>
+          <small>Lo que falta por reunir</small>
+        </article>
+
+      </section>
+
+
+      <!-- LISTA DE METAS -->
+
+      <section class="panel goal-panel">
+
+        <div class="panel-header">
+
+          <div>
+            <span class="section-eyebrow">
+              Planificación
+            </span>
+            <h2>Metas familiares</h2>
+          </div>
+
+        </div>
+
+        <div id="goalList" class="goal-list">
+
+          <div class="empty-state">
+            <div class="empty-icon">🎯</div>
+            <h3>Aún no hay metas</h3>
+            <p>
+              Agrega un objetivo como reparaciones, muebles, refrigerador,
+              viajes u otro monto que necesiten reunir.
+            </p>
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
 
 
     <!-- ===================================================
-         ACCIONES DEL MES
+         VISTA HISTORIAL
     ==================================================== -->
 
-    <section class="month-tools">
-
-      <div>
-
-        <span class="section-eyebrow">
-          Presupuesto
-        </span>
-
-        <h2>
-          Acciones del mes
-        </h2>
-
-        <p>
-          Utiliza el presupuesto actual como base para
-          organizar los meses siguientes.
-        </p>
-
+    <div id="historyView" class="app-view" data-app-view="history">
+      <div class="view-heading">
+        <div>
+          <span class="section-eyebrow">Evolución financiera</span>
+          <h2>Historial</h2>
+          <p>Revisa y compara los meses que ya tienen movimientos registrados en Balance.</p>
+        </div>
       </div>
 
+      <section class="history-summary-grid">
+        <article class="history-summary-card">
+          <span>Meses registrados</span><strong id="historyMonthCount">0</strong><small>Con ingresos o gastos</small>
+        </article>
+        <article class="history-summary-card income-history">
+          <span>Ingresos acumulados</span><strong id="historyTotalIncome">$0</strong><small>En los meses registrados</small>
+        </article>
+        <article class="history-summary-card expense-history">
+          <span>Gastos acumulados</span><strong id="historyTotalExpenses">$0</strong><small>En los meses registrados</small>
+        </article>
+        <article class="history-summary-card balance-history">
+          <span>Balance acumulado</span><strong id="historyTotalBalance">$0</strong><small>Ingresos menos gastos</small>
+        </article>
+      </section>
 
-      <button
-        id="copyMonthButton"
-        class="secondary-button"
-        type="button"
-      >
-        Copiar mes anterior
-      </button>
+      <section class="panel history-panel">
+        <div class="panel-header">
+          <div><span class="section-eyebrow">Comparación mensual</span><h2>Evolución por mes</h2></div>
+        </div>
+        <div id="historyChart" class="history-chart"></div>
+      </section>
 
-    </section>
+      <section class="panel history-panel">
+        <div class="panel-header">
+          <div><span class="section-eyebrow">Detalle</span><h2>Meses registrados</h2></div>
+        </div>
+        <div id="historyList" class="history-list"></div>
+      </section>
+    </div>
 
   </main>
 
@@ -707,7 +1145,6 @@
 
         </div>
 
-
         <button
           class="close-button"
           type="button"
@@ -720,17 +1157,13 @@
       </div>
 
 
-
       <form id="incomeForm">
 
         <input
           id="incomeEditId"
           type="hidden"
-          value=""
         >
 
-
-        <!-- DESCRIPCIÓN -->
 
         <div class="form-group">
 
@@ -740,7 +1173,6 @@
 
           <input
             id="incomeName"
-            name="incomeName"
             type="text"
             placeholder="Ej: Sueldo, bono, arriendo..."
             autocomplete="off"
@@ -750,9 +1182,6 @@
         </div>
 
 
-
-        <!-- MONTO -->
-
         <div class="form-group">
 
           <label for="incomeAmount">
@@ -761,13 +1190,10 @@
 
           <div class="money-input">
 
-            <span>
-              $
-            </span>
+            <span>$</span>
 
             <input
               id="incomeAmount"
-              name="incomeAmount"
               type="number"
               min="0"
               step="1"
@@ -781,9 +1207,6 @@
         </div>
 
 
-
-        <!-- ACCIONES -->
-
         <div class="modal-actions">
 
           <button
@@ -793,7 +1216,6 @@
           >
             Cancelar
           </button>
-
 
           <button
             id="saveIncomeButton"
@@ -853,7 +1275,6 @@
 
         </div>
 
-
         <button
           class="close-button"
           type="button"
@@ -866,17 +1287,13 @@
       </div>
 
 
-
       <form id="expenseForm">
 
         <input
           id="expenseEditId"
           type="hidden"
-          value=""
         >
 
-
-        <!-- DESCRIPCIÓN -->
 
         <div class="form-group">
 
@@ -886,7 +1303,6 @@
 
           <input
             id="expenseName"
-            name="expenseName"
             type="text"
             placeholder="Ej: Luz, agua, dividendo..."
             autocomplete="off"
@@ -896,19 +1312,13 @@
         </div>
 
 
-
-        <!-- GASTOS HABITUALES -->
-
         <div class="form-group">
 
           <label for="usualExpense">
             Gasto habitual
           </label>
 
-          <select
-            id="usualExpense"
-            name="usualExpense"
-          >
+          <select id="usualExpense">
 
             <option value="">
               Seleccionar...
@@ -1005,15 +1415,12 @@
           </select>
 
           <small class="form-help">
-            Puedes elegir un gasto habitual o escribir
-            una descripción personalizada arriba.
+            Puedes elegir uno habitual o escribir
+            una descripción personalizada.
           </small>
 
         </div>
 
-
-
-        <!-- CATEGORÍA -->
 
         <div class="form-group">
 
@@ -1023,7 +1430,6 @@
 
           <select
             id="expenseCategory"
-            name="expenseCategory"
             required
           >
 
@@ -1048,9 +1454,6 @@
         </div>
 
 
-
-        <!-- MONTO -->
-
         <div class="form-group">
 
           <label for="expenseAmount">
@@ -1059,13 +1462,10 @@
 
           <div class="money-input">
 
-            <span>
-              $
-            </span>
+            <span>$</span>
 
             <input
               id="expenseAmount"
-              name="expenseAmount"
               type="number"
               min="0"
               step="1"
@@ -1079,8 +1479,201 @@
         </div>
 
 
+        <div class="modal-actions">
 
-        <!-- ACCIONES -->
+          <button
+            class="secondary-button"
+            type="button"
+            data-close-modal
+          >
+            Cancelar
+          </button>
+
+          <button
+            id="saveExpenseButton"
+            class="primary-button"
+            type="submit"
+          >
+            Guardar gasto
+          </button>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- =====================================================
+       MODAL DEUDA
+  ====================================================== -->
+
+  <div
+    id="debtModal"
+    class="modal"
+    aria-hidden="true"
+  >
+
+    <div
+      class="modal-backdrop"
+      data-close-modal
+    ></div>
+
+
+    <div
+      class="modal-dialog"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="debtModalTitle"
+    >
+
+      <div class="modal-header">
+
+        <div>
+
+          <span
+            id="debtModalEyebrow"
+            class="section-eyebrow"
+          >
+            Nueva obligación
+          </span>
+
+          <h2 id="debtModalTitle">
+            Agregar deuda
+          </h2>
+
+        </div>
+
+
+        <button
+          class="close-button"
+          type="button"
+          data-close-modal
+          aria-label="Cerrar"
+        >
+          ×
+        </button>
+
+      </div>
+
+
+      <form id="debtForm">
+
+        <input
+          id="debtEditId"
+          type="hidden"
+        >
+
+
+        <div class="form-group">
+
+          <label for="debtName">
+            Nombre
+          </label>
+
+          <input
+            id="debtName"
+            type="text"
+            placeholder="Ej: Visa Banco, Línea de crédito..."
+            autocomplete="off"
+            required
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="debtType">
+            Tipo
+          </label>
+
+          <select
+            id="debtType"
+            required
+          >
+
+            <option value="Tarjeta de crédito">
+              Tarjeta de crédito
+            </option>
+
+            <option value="Línea de crédito">
+              Línea de crédito
+            </option>
+
+            <option value="Crédito">
+              Crédito
+            </option>
+
+            <option value="Préstamo">
+              Préstamo
+            </option>
+
+            <option value="Otro">
+              Otro
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="debtAmount">
+            Saldo pendiente
+          </label>
+
+          <div class="money-input">
+
+            <span>$</span>
+
+            <input
+              id="debtAmount"
+              type="number"
+              min="0"
+              step="1"
+              inputmode="numeric"
+              placeholder="0"
+              required
+            >
+
+          </div>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="debtMonthlyPayment">
+            Pago mensual
+          </label>
+
+          <div class="money-input">
+
+            <span>$</span>
+
+            <input
+              id="debtMonthlyPayment"
+              type="number"
+              min="0"
+              step="1"
+              inputmode="numeric"
+              placeholder="0"
+            >
+
+          </div>
+
+          <small class="form-help">
+            Es opcional. Puedes registrar cuánto
+            destinan normalmente a esta deuda cada mes.
+          </small>
+
+        </div>
+
 
         <div class="modal-actions">
 
@@ -1092,15 +1685,140 @@
             Cancelar
           </button>
 
-
           <button
-            id="saveExpenseButton"
+            id="saveDebtButton"
             class="primary-button"
             type="submit"
           >
-            Guardar gasto
+            Guardar deuda
           </button>
 
+        </div>
+
+      </form>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- =====================================================
+       MODAL META
+  ====================================================== -->
+
+  <div
+    id="goalModal"
+    class="modal"
+    aria-hidden="true"
+  >
+
+    <div
+      class="modal-backdrop"
+      data-close-modal
+    ></div>
+
+    <div
+      class="modal-dialog"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="goalModalTitle"
+    >
+
+      <div class="modal-header">
+
+        <div>
+          <span
+            id="goalModalEyebrow"
+            class="section-eyebrow"
+          >
+            Nuevo objetivo
+          </span>
+
+          <h2 id="goalModalTitle">
+            Agregar meta
+          </h2>
+        </div>
+
+        <button
+          class="close-button"
+          type="button"
+          data-close-modal
+          aria-label="Cerrar"
+        >
+          ×
+        </button>
+
+      </div>
+
+      <form id="goalForm">
+
+        <input
+          id="goalEditId"
+          type="hidden"
+        >
+
+        <div class="form-group">
+          <label for="goalName">Nombre de la meta</label>
+          <input
+            id="goalName"
+            type="text"
+            placeholder="Ej: Refrigerador, reparaciones, viaje..."
+            autocomplete="off"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="goalTargetAmount">Monto objetivo</label>
+          <div class="money-input">
+            <span>$</span>
+            <input
+              id="goalTargetAmount"
+              type="number"
+              min="1"
+              step="1"
+              inputmode="numeric"
+              placeholder="0"
+              required
+            >
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="goalSavedAmount">Monto ahorrado</label>
+          <div class="money-input">
+            <span>$</span>
+            <input
+              id="goalSavedAmount"
+              type="number"
+              min="0"
+              step="1"
+              inputmode="numeric"
+              placeholder="0"
+            >
+          </div>
+          <small class="form-help">
+            Puedes comenzar en $0 y actualizar este monto a medida que avancen.
+          </small>
+        </div>
+
+        <div class="modal-actions">
+          <button
+            class="secondary-button"
+            type="button"
+            data-close-modal
+          >
+            Cancelar
+          </button>
+
+          <button
+            id="saveGoalButton"
+            class="primary-button"
+            type="submit"
+          >
+            Guardar meta
+          </button>
         </div>
 
       </form>
@@ -1168,8 +1886,7 @@
         </div>
 
         <p id="copyMonthMessage">
-          Se copiarán los ingresos y gastos del mes
-          anterior como base para este presupuesto.
+          Se copiarán los registros del mes anterior.
         </p>
 
 
@@ -1190,7 +1907,7 @@
               </strong>
 
               <small>
-                Sueldos, bonos, arriendos y otros.
+                Sueldos, bonos y arriendos.
               </small>
 
             </span>
@@ -1235,7 +1952,6 @@
           Cancelar
         </button>
 
-
         <button
           id="confirmCopyMonth"
           class="primary-button"
@@ -1264,12 +1980,7 @@
   ></div>
 
 
-
-  <!-- =====================================================
-       JAVASCRIPT
-  ====================================================== -->
-
-  <script src="app.js"></script>
+  <script src="app.js?v=1.3.0"></script>
 
 </body>
 </html>
