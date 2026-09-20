@@ -5055,3 +5055,918 @@ select:focus-visible {
     padding: 22px 18px;
   }
 }
+
+
+/* =========================================================
+   BALANCE v2.1 · INTERFAZ DE SINCRONIZACIÓN FAMILIAR
+========================================================= */
+
+.sync-status-button {
+  min-width: 150px;
+  min-height: 52px;
+  display: grid;
+  grid-template-columns: 34px 1fr 10px;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 12px 7px 9px;
+  border: 1px solid #dbe4df;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 4px 14px rgba(30, 70, 52, .05);
+  cursor: pointer;
+  transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease;
+}
+
+.sync-status-button:hover {
+  transform: translateY(-1px);
+  border-color: #c8d8cf;
+  box-shadow: 0 7px 20px rgba(30, 70, 52, .09);
+}
+
+.sync-family-icon {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 11px;
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.sync-status-copy {
+  min-width: 0;
+}
+
+.sync-status-copy small {
+  font-size: 9px;
+  letter-spacing: .9px;
+}
+
+.sync-status-copy strong {
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.sync-dot {
+  justify-self: end;
+  width: 8px;
+  height: 8px;
+}
+
+.modal-overlay {
+  background: rgba(19, 31, 25, .46);
+}
+
+.modal-overlay > .modal.sync-modal {
+  width: min(680px, 100%);
+  padding: 30px;
+  border: 1px solid rgba(218, 228, 222, .9);
+  border-radius: 24px;
+  box-shadow: 0 30px 90px rgba(15, 36, 25, .22);
+}
+
+.sync-modal-heading {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding-right: 40px;
+}
+
+.sync-modal-brand {
+  width: 46px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 46px;
+  border-radius: 14px;
+  background: var(--primary);
+  color: white;
+}
+
+.sync-modal-heading h2 {
+  margin: 3px 0 0;
+  font-size: clamp(21px, 3vw, 27px);
+  letter-spacing: -.5px;
+}
+
+.sync-intro {
+  max-width: 570px;
+  margin: 14px 0 24px;
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.sync-choice-grid {
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.sync-choice-card {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 46px 1fr 28px;
+  align-items: center;
+  gap: 14px;
+  padding: 17px;
+  border-radius: 16px;
+  background: #fff;
+  border: 1px solid #dce5e0;
+  box-shadow: 0 3px 12px rgba(31, 67, 50, .035);
+  transition: transform .16s ease, border-color .16s ease, background .16s ease, box-shadow .16s ease;
+}
+
+.sync-choice-card:hover {
+  transform: translateY(-1px);
+  border-color: #bfd3c7;
+  box-shadow: 0 7px 20px rgba(31, 67, 50, .07);
+}
+
+.sync-choice-primary {
+  background: linear-gradient(135deg, #f4faf6 0%, #edf7f1 100%);
+  border-color: #cfe2d7;
+}
+
+.sync-choice-icon {
+  width: 46px;
+  height: 46px;
+  margin: 0;
+  border-radius: 13px;
+  font-size: 22px;
+}
+
+.sync-choice-text {
+  display: block;
+}
+
+.sync-choice-text strong,
+.sync-choice-text small {
+  display: block;
+}
+
+.sync-choice-text strong {
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+
+.sync-choice-text small {
+  max-width: 480px;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.sync-choice-arrow {
+  color: var(--primary);
+  font-size: 19px;
+  font-weight: 700;
+  opacity: .75;
+}
+
+.join-family-form {
+  margin-top: 12px;
+  padding: 18px;
+  border-radius: 16px;
+  background: #f8faf9;
+}
+
+.join-family-heading {
+  margin-bottom: 12px;
+}
+
+.join-family-heading strong,
+.join-family-heading small {
+  display: block;
+}
+
+.join-family-heading strong {
+  font-size: 13px;
+}
+
+.join-family-heading small {
+  margin-top: 3px;
+  color: var(--text-soft);
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+.join-family-form input {
+  min-height: 54px;
+  text-align: center;
+  font-size: 15px;
+  letter-spacing: 2px;
+  border-radius: 13px;
+}
+
+.sync-join-button {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.family-code-box {
+  padding: 22px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #eff8f3 0%, #e6f3eb 100%);
+}
+
+.family-code-box > strong {
+  margin: 10px 0 15px;
+  font-size: clamp(18px, 4vw, 26px);
+  letter-spacing: 2.5px;
+}
+
+.sync-connected-state {
+  margin: 12px 0;
+  border-radius: 15px;
+  background: #fff;
+}
+
+.sync-privacy-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+  color: var(--text-soft);
+}
+
+.sync-privacy-note > span {
+  color: var(--primary);
+  font-weight: 900;
+}
+
+.sync-privacy-note p {
+  margin: 0;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.sync-feedback:empty {
+  display: none;
+}
+
+.sync-feedback:not(:empty) {
+  min-height: 0;
+  margin: 10px 0 0;
+  padding: 9px 11px;
+  border-radius: 10px;
+  background: var(--surface-soft);
+}
+
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+@media (max-width: 720px) {
+  .modal-overlay > .modal.sync-modal {
+    padding: 24px 18px;
+    border-radius: 20px;
+  }
+
+  .sync-modal-brand {
+    width: 42px;
+    height: 42px;
+    flex-basis: 42px;
+  }
+
+  .sync-choice-card {
+    grid-template-columns: 42px 1fr 22px;
+    gap: 11px;
+    padding: 14px;
+  }
+
+  .sync-choice-icon {
+    width: 42px;
+    height: 42px;
+  }
+
+  .sync-status-button {
+    min-width: auto;
+    grid-template-columns: 32px 1fr 8px;
+  }
+}
+
+
+/* =========================================================
+   BALANCE v2.2 · ENCABEZADO REFINADO (SIN IMAGEN)
+========================================================= */
+
+.app-header {
+  position: relative;
+  min-height: 92px;
+  padding: 18px clamp(24px, 5vw, 72px);
+  display: grid;
+  grid-template-columns: minmax(250px, 1fr) auto minmax(250px, 1fr);
+  align-items: center;
+  gap: 28px;
+  background: rgba(255, 255, 255, .96);
+  border-bottom: 1px solid #e8eeea;
+  box-shadow: 0 2px 16px rgba(27, 59, 43, .025);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 13px;
+  width: max-content;
+}
+
+.brand-symbol {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  flex: 0 0 48px;
+  display: block;
+  overflow: hidden;
+  border-radius: 14px;
+  background: linear-gradient(145deg, #2b7659, #174b38);
+  box-shadow: 0 7px 16px rgba(28, 91, 65, .18);
+}
+
+.brand-symbol::after {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 10px;
+}
+
+.brand-roof {
+  position: absolute;
+  left: 12px;
+  top: 13px;
+  width: 23px;
+  height: 23px;
+  border-left: 3px solid white;
+  border-top: 3px solid white;
+  transform: rotate(45deg);
+  border-radius: 2px;
+  opacity: .95;
+}
+
+.brand-bars {
+  position: absolute;
+  left: 14px;
+  bottom: 10px;
+  z-index: 2;
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 20px;
+  padding: 0 3px 2px;
+  background: #235f48;
+}
+
+.brand-bars i {
+  display: block;
+  width: 4px;
+  border-radius: 3px 3px 1px 1px;
+  background: white;
+}
+
+.brand-bars i:nth-child(1) { height: 7px; opacity: .72; }
+.brand-bars i:nth-child(2) { height: 12px; opacity: .86; }
+.brand-bars i:nth-child(3) { height: 18px; }
+
+.brand h1,
+.brand-title {
+  letter-spacing: -.6px;
+}
+
+.brand p,
+.brand-subtitle {
+  margin-top: 2px;
+  color: #7b8780;
+  font-size: 11px;
+  letter-spacing: .05px;
+}
+
+.main-navigation {
+  justify-self: center;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 14px;
+  background: #f7f9f8;
+  border: 1px solid #edf1ef;
+}
+
+.main-navigation button,
+.main-navigation a,
+.nav-button {
+  min-height: 38px;
+  padding: 0 14px;
+  border-radius: 10px;
+  transition: background .16s ease, color .16s ease, box-shadow .16s ease;
+}
+
+.main-navigation .active,
+.main-navigation [aria-current="page"],
+.nav-button.active {
+  background: #e8f2ed;
+  color: #1f6148;
+  box-shadow: inset 0 0 0 1px rgba(44, 110, 82, .04);
+}
+
+.sync-status-button {
+  justify-self: end;
+  min-width: 160px;
+  min-height: 50px;
+  border-radius: 15px;
+  box-shadow: none;
+  background: #fbfcfb;
+}
+
+.sync-status-button:hover {
+  transform: none;
+  background: #f7faf8;
+  box-shadow: none;
+}
+
+.month-selector {
+  margin-top: 14px;
+}
+
+@media (max-width: 1180px) {
+  .app-header {
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+  }
+
+  .main-navigation {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    justify-self: stretch;
+    justify-content: center;
+    overflow-x: auto;
+  }
+}
+
+@media (max-width: 700px) {
+  .app-header {
+    min-height: auto;
+    padding: 14px 16px;
+    grid-template-columns: 1fr auto;
+  }
+
+  .brand-symbol {
+    width: 42px;
+    height: 42px;
+    flex-basis: 42px;
+    border-radius: 12px;
+  }
+
+  .brand p,
+  .brand-subtitle {
+    display: none;
+  }
+
+  .sync-status-button {
+    min-width: 50px;
+    grid-template-columns: 32px 8px;
+  }
+
+  .sync-status-copy {
+    display: none;
+  }
+
+  .main-navigation {
+    justify-content: flex-start;
+  }
+
+  .main-navigation button,
+  .main-navigation a,
+  .nav-button {
+    flex: 0 0 auto;
+    padding: 0 12px;
+  }
+}
+
+
+/* =========================================================
+   BALANCE v2.3 · HEADER COMPACTO
+   Una sola franja visual: marca / navegación / controles
+========================================================= */
+
+.app-header {
+  min-height: 104px;
+  padding: 18px clamp(28px, 4.5vw, 78px);
+  display: grid;
+  grid-template-columns: minmax(270px, 1fr) auto minmax(330px, 1fr);
+  grid-template-rows: 1fr;
+  align-items: center;
+  gap: 28px;
+  background: #ffffff;
+  border-bottom: 1px solid #e6ece8;
+}
+
+.brand {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: center;
+}
+
+.main-navigation {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: center;
+  justify-self: center;
+  margin: 0;
+}
+
+.sync-status-button {
+  grid-column: 3;
+  grid-row: 1;
+  justify-self: end;
+  align-self: center;
+  margin: 0;
+}
+
+/* El selector de mes deja de crear una segunda franja enorme.
+   Se integra como control compacto dentro de la zona derecha. */
+.month-selector {
+  position: absolute;
+  right: clamp(220px, 15vw, 270px);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 205px;
+  min-height: 50px;
+  margin: 0;
+  border-radius: 15px;
+  background: #f8faf9;
+  box-shadow: none;
+}
+
+.month-selector::before {
+  opacity: .8;
+}
+
+/* Más aire y precisión en la marca */
+.brand-symbol {
+  width: 50px;
+  height: 50px;
+  flex-basis: 50px;
+  border-radius: 15px;
+}
+
+.brand h1,
+.brand-title {
+  font-size: 25px;
+  line-height: 1.05;
+}
+
+.brand p,
+.brand-subtitle {
+  margin-top: 5px;
+  font-size: 11px;
+}
+
+/* Navegación más ligera: no parece una caja grande flotante */
+.main-navigation {
+  padding: 3px;
+  gap: 2px;
+  background: #f6f8f7;
+  border-color: #e7ece9;
+  border-radius: 13px;
+}
+
+.main-navigation button,
+.main-navigation a,
+.nav-button {
+  min-height: 40px;
+  padding: 0 15px;
+  border-radius: 10px;
+  font-size: 12px;
+}
+
+/* El control Familia queda alineado con el selector de mes */
+.sync-status-button {
+  min-width: 172px;
+  min-height: 52px;
+}
+
+/* Evita que el contenido principal quede demasiado separado */
+.app-main,
+main {
+  scroll-margin-top: 110px;
+}
+
+/* En pantallas medianas volvemos a dos filas compactas y deliberadas */
+@media (max-width: 1450px) {
+  .app-header {
+    min-height: 146px;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+    row-gap: 12px;
+  }
+
+  .brand {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .sync-status-button {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .main-navigation {
+    grid-column: 1;
+    grid-row: 2;
+    justify-self: start;
+  }
+
+  .month-selector {
+    position: static;
+    grid-column: 2;
+    grid-row: 2;
+    justify-self: end;
+    width: 230px;
+    transform: none;
+  }
+}
+
+@media (max-width: 820px) {
+  .app-header {
+    min-height: auto;
+    padding: 14px 16px;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto auto;
+    gap: 10px;
+  }
+
+  .brand {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .sync-status-button {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .month-selector {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    justify-self: stretch;
+    width: 100%;
+  }
+
+  .main-navigation {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    justify-self: stretch;
+    overflow-x: auto;
+  }
+}
+
+
+/* =========================================================
+   BALANCE v2.4 · HEADER REFINADO
+========================================================= */
+
+/* Marca: símbolo tipográfico limpio, sin imagen ni dibujo improvisado */
+.brand-symbol-v24 {
+  position: relative;
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
+  display: grid;
+  place-items: center;
+  overflow: visible;
+  border-radius: 14px;
+  background: #245f49;
+  box-shadow: 0 7px 18px rgba(28, 83, 61, .16);
+}
+
+.brand-symbol-v24::before {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 11px;
+}
+
+.brand-symbol-v24::after {
+  content: "";
+  position: absolute;
+  right: -3px;
+  top: -3px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50% 50% 50% 2px;
+  background: #9fc8a7;
+  transform: rotate(20deg);
+  border: 2px solid white;
+}
+
+.brand-b {
+  position: relative;
+  z-index: 2;
+  color: white;
+  font-size: 25px;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: -2px;
+  transform: translateX(-1px);
+}
+
+/* Neutraliza restos del símbolo anterior */
+.brand-symbol-v24 .brand-roof,
+.brand-symbol-v24 .brand-bars {
+  display: none !important;
+}
+
+/* El header se organiza en tres zonas claras */
+.app-header {
+  min-height: 94px;
+  padding: 16px clamp(28px, 4.4vw, 80px);
+  grid-template-columns: minmax(300px, 1fr) auto minmax(430px, 1fr);
+  gap: 34px;
+}
+
+.brand {
+  gap: 14px;
+}
+
+.brand h1,
+.brand-title {
+  font-size: 24px;
+  font-weight: 780;
+  letter-spacing: -.7px;
+}
+
+.brand p,
+.brand-subtitle {
+  margin-top: 4px;
+  color: #87928c;
+  font-size: 10.5px;
+}
+
+/* Menú más liviano */
+.main-navigation {
+  min-height: 52px;
+  padding: 4px;
+  border-radius: 15px;
+  background: #f7f9f8;
+}
+
+.main-navigation button,
+.main-navigation a,
+.nav-button {
+  min-height: 42px;
+  padding: 0 17px;
+}
+
+/* Controles derechos: separados; no deben tocarse visualmente */
+.month-selector {
+  right: clamp(265px, 17vw, 310px);
+  width: 225px;
+  min-height: 54px;
+  border: 1px solid #dfe7e2;
+  border-radius: 16px;
+  background: #fbfcfb;
+}
+
+.sync-status-button {
+  min-width: 184px;
+  min-height: 54px;
+  border: 1px solid #dfe7e2;
+  border-radius: 16px;
+  background: #fbfcfb;
+}
+
+/* En la captura anterior ambos controles quedaban pegados */
+@media (min-width: 1451px) {
+  .sync-status-button {
+    margin-left: 18px;
+  }
+}
+
+@media (max-width: 1450px) {
+  .app-header {
+    min-height: 154px;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+  }
+
+  .main-navigation {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .month-selector {
+    position: static;
+    grid-column: 2;
+    grid-row: 2;
+    width: 240px;
+    transform: none;
+  }
+}
+
+@media (max-width: 820px) {
+  .app-header {
+    min-height: auto;
+    padding: 14px 16px;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto auto;
+  }
+
+  .brand-symbol-v24 {
+    width: 42px;
+    height: 42px;
+    flex-basis: 42px;
+  }
+
+  .brand-b {
+    font-size: 23px;
+  }
+
+  .month-selector {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    width: 100%;
+  }
+
+  .main-navigation {
+    grid-column: 1 / -1;
+    grid-row: 3;
+  }
+}
+
+
+/* =========================================================
+   BALANCE v2.5 · LOGO ORIGINAL EN EL ENCABEZADO
+========================================================= */
+
+.brand-logo-original {
+  width: 52px;
+  height: 52px;
+  flex: 0 0 52px;
+  display: block;
+  object-fit: contain;
+  border-radius: 14px;
+  box-shadow: 0 7px 18px rgba(28, 83, 61, .14);
+}
+
+/* La marca tipográfica temporal deja de intervenir */
+.brand-symbol-v24,
+.brand-b {
+  display: none !important;
+}
+
+@media (max-width: 820px) {
+  .brand-logo-original {
+    width: 44px;
+    height: 44px;
+    flex-basis: 44px;
+    border-radius: 12px;
+  }
+}
+
+
+/* =========================================================
+   BALANCE v2.5.1 · FIX LOGO DEL ENCABEZADO
+========================================================= */
+
+.brand-icon {
+  width: 52px !important;
+  height: 52px !important;
+  flex: 0 0 52px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  border-radius: 14px !important;
+  background: transparent !important;
+  box-shadow: 0 7px 18px rgba(28, 83, 61, .14) !important;
+}
+
+.brand-icon .brand-logo-original {
+  width: 52px !important;
+  height: 52px !important;
+  display: block !important;
+  object-fit: cover !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  border-radius: 14px !important;
+  background: #245f49 !important;
+}
+
+@media (max-width: 820px) {
+  .brand-icon,
+  .brand-icon .brand-logo-original {
+    width: 44px !important;
+    height: 44px !important;
+    flex-basis: 44px !important;
+    border-radius: 12px !important;
+  }
+}
