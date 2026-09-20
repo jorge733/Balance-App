@@ -172,6 +172,12 @@ const copyMonthButton =
 
   document.getElementById("copyMonthButton");
 
+const applyRecurringFromActionsButton =
+  document.getElementById("applyRecurringFromActions");
+
+const startMonthFromZeroButton =
+  document.getElementById("startMonthFromZero");
+
 
 
 
@@ -446,6 +452,27 @@ const usualExpenseInput =
 
   document.getElementById("usualExpense");
 
+const recurringExpenseInput =
+  document.getElementById("recurringExpense");
+
+const recurringExpensesPanel =
+  document.getElementById("recurringExpensesPanel");
+
+const recurringExpensesList =
+  document.getElementById("recurringExpensesList");
+
+const applyRecurringExpensesButton =
+  document.getElementById("applyRecurringExpenses");
+
+const recurringPendingNotice =
+  document.getElementById("recurringPendingNotice");
+
+const recurringPendingText =
+  document.getElementById("recurringPendingText");
+
+const applyPendingRecurringButton =
+  document.getElementById("applyPendingRecurring");
+
 
 
 const expenseModalTitle =
@@ -670,7 +697,9 @@ function createEmptyDatabase() {
 
     debts: [],
 
-    goals: []
+    goals: [],
+
+    recurringExpenses: []
 
   };
 
@@ -760,6 +789,12 @@ function loadDatabase() {
 
     }
 
+    if (!Array.isArray(parsed.recurringExpenses)) {
+
+      parsed.recurringExpenses = [];
+
+    }
+
     // Compatibilidad con versiones que guardaban meses en la raíz.
     Object.keys(parsed).forEach((key) => {
       if (/^\d{4}-\d{2}$/.test(key) && parsed[key] && typeof parsed[key] === "object") {
@@ -809,7 +844,45 @@ function saveDatabase() {
 
   );
 
+  window.dispatchEvent(
+    new CustomEvent("balance:local-save", {
+      detail: { database }
+    })
+  );
+
 }
+
+window.BalanceCloudBridge = {
+  getDatabase() {
+    return JSON.parse(JSON.stringify(database));
+  },
+
+  replaceDatabase(cloudDatabase) {
+    if (!cloudDatabase || typeof cloudDatabase !== "object") return;
+
+    const nextDatabase = {
+      months:
+        cloudDatabase.months && typeof cloudDatabase.months === "object"
+          ? cloudDatabase.months
+          : {},
+      debts: Array.isArray(cloudDatabase.debts)
+        ? cloudDatabase.debts
+        : [],
+      goals: Array.isArray(cloudDatabase.goals)
+        ? cloudDatabase.goals
+        : [],
+      recurringExpenses: Array.isArray(cloudDatabase.recurringExpenses)
+        ? cloudDatabase.recurringExpenses
+        : []
+    };
+
+    database = nextDatabase;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(database));
+    renderApp();
+  }
+};
+
+
 
 
 
@@ -1108,6 +1181,31 @@ function formatCurrency(value) {
 
 
 
+
+
+
+function parseCurrencyInput(value) {
+  const digits = String(value ?? "").replace(/\D/g, "");
+  return digits ? Number(digits) : 0;
+}
+
+function formatCurrencyInputValue(value) {
+  const amount = parseCurrencyInput(value);
+  return amount ? new Intl.NumberFormat("es-CL").format(amount) : "";
+}
+
+function setupCurrencyInputs() {
+  document.querySelectorAll("[data-currency-input]").forEach((input) => {
+    input.addEventListener("input", () => {
+      const formatted = formatCurrencyInputValue(input.value);
+      input.value = formatted;
+    });
+
+    input.addEventListener("focus", () => {
+      requestAnimationFrame(() => input.select());
+    });
+  });
+}
 
 function generateId() {
 
@@ -2525,7 +2623,7 @@ function saveIncome(event) {
 
   const amount =
 
-    Number(incomeAmountInput.value);
+    parseCurrencyInput(incomeAmountInput.value);
 
 
 
@@ -2851,6 +2949,8 @@ function prepareNewExpense() {
 
     "";
 
+  if (recurringExpenseInput) recurringExpenseInput.checked = false;
+
 
 
   expenseModalEyebrow.textContent =
@@ -2905,7 +3005,7 @@ function saveExpense(event) {
 
   const amount =
 
-    Number(expenseAmountInput.value);
+    parseCurrencyInput(expenseAmountInput.value);
 
 
 
@@ -2977,6 +3077,12 @@ function saveExpense(event) {
 
       expense.category = category;
 
+      if (recurringExpenseInput && recurringExpenseInput.checked) {
+        expense.recurringId = syncRecurringTemplate(name, amount, category, true);
+      } else if (expense.recurringId) {
+        delete expense.recurringId;
+      }
+
       expense.updatedAt =
 
         new Date().toISOString();
@@ -2995,7 +3101,10 @@ function saveExpense(event) {
 
   } else {
 
-
+    const recurringId =
+      recurringExpenseInput && recurringExpenseInput.checked
+        ? syncRecurringTemplate(name, amount, category, true)
+        : null;
 
     monthData.expenses.push({
 
@@ -3006,6 +3115,8 @@ function saveExpense(event) {
       amount,
 
       category,
+
+      ...(recurringId ? { recurringId } : {}),
 
       createdAt:
 
@@ -3110,6 +3221,15 @@ function editExpense(id) {
 
 
   usualExpenseInput.value = "";
+
+  if (recurringExpenseInput) {
+    recurringExpenseInput.checked = Boolean(
+      expense.recurringId ||
+      normalizeRecurringExpenses().some((item) =>
+        recurringKey(item) === recurringKey(expense)
+      )
+    );
+  }
 
 
 
@@ -3219,6 +3339,196 @@ function deleteExpense(id) {
 
 
 
+
+
+/* =========================================================
+   GASTOS RECURRENTES
+========================================================= */
+
+function normalizeRecurringExpenses() {
+  if (!Array.isArray(database.recurringExpenses)) {
+    database.recurringExpenses = [];
+  }
+  return database.recurringExpenses;
+}
+
+function recurringKey(item) {
+  return `${String(item.name || "").trim().toLowerCase()}|${item.category || ""}`;
+}
+
+function syncRecurringTemplate(name, amount, category, enabled = true) {
+  const recurring = normalizeRecurringExpenses();
+  const key = recurringKey({ name, category });
+  const existing = recurring.find((item) => recurringKey(item) === key);
+
+  if (existing) {
+    existing.name = name;
+    existing.amount = amount;
+    existing.category = category;
+    existing.enabled = enabled;
+    existing.updatedAt = new Date().toISOString();
+    return existing.id;
+  }
+
+  const item = {
+    id: generateId(),
+    name,
+    amount,
+    category,
+    enabled,
+    createdAt: new Date().toISOString()
+  };
+  recurring.push(item);
+  return item.id;
+}
+
+function getPendingRecurringExpenses() {
+  const monthData = getCurrentMonthData(false);
+  const expenses = monthData && Array.isArray(monthData.expenses)
+    ? monthData.expenses
+    : [];
+
+  return normalizeRecurringExpenses()
+    .filter((item) => item.enabled !== false)
+    .filter((item) => !expenses.some((expense) =>
+      expense.recurringId === item.id ||
+      (
+        String(expense.name || "").trim().toLowerCase() === String(item.name || "").trim().toLowerCase() &&
+        expense.category === item.category &&
+        Number(expense.amount || 0) === Number(item.amount || 0)
+      )
+    ));
+}
+
+function renderRecurringPendingNotice() {
+  if (!recurringPendingNotice || !recurringPendingText) return;
+
+  const pending = getPendingRecurringExpenses();
+
+  if (pending.length === 0) {
+    recurringPendingNotice.hidden = true;
+    return;
+  }
+
+  const total = pending.reduce(
+    (sum, item) => sum + Number(item.amount || 0),
+    0
+  );
+
+  recurringPendingText.textContent =
+    `Tienes ${pending.length} gasto${pending.length === 1 ? "" : "s"} recurrente${pending.length === 1 ? "" : "s"} pendiente${pending.length === 1 ? "" : "s"} por ${formatCurrency(total)} en este mes.`;
+
+  recurringPendingNotice.hidden = false;
+}
+
+function renderRecurringExpenses() {
+  renderRecurringPendingNotice();
+
+  if (!recurringExpensesPanel || !recurringExpensesList) return;
+
+  const recurring = normalizeRecurringExpenses();
+  recurringExpensesPanel.hidden = recurring.length === 0;
+
+  if (recurring.length === 0) {
+    recurringExpensesList.innerHTML = "";
+    return;
+  }
+
+  recurringExpensesList.innerHTML = recurring.map((item) => `
+    <div class="recurring-item">
+      <div class="recurring-main">
+        <span class="recurring-icon">${categoryIcons[item.category] || "🧾"}</span>
+        <div>
+          <strong>${escapeHTML(item.name)}</strong>
+          <span>${escapeHTML(item.category)} · ${formatCurrency(item.amount)}</span>
+        </div>
+      </div>
+      <div class="recurring-actions">
+        <label class="recurring-toggle">
+          <input type="checkbox" data-recurring-toggle="${item.id}" ${item.enabled !== false ? "checked" : ""}>
+          <span>${item.enabled !== false ? "Activo" : "Pausado"}</span>
+        </label>
+        <button class="delete-button" type="button" data-recurring-delete="${item.id}" aria-label="Eliminar gasto recurrente">×</button>
+      </div>
+    </div>
+  `).join("");
+}
+
+function applyRecurringExpenses() {
+  const recurring = normalizeRecurringExpenses().filter((item) => item.enabled !== false);
+
+  if (recurring.length === 0) {
+    showToast("No hay gastos recurrentes activos.");
+    return;
+  }
+
+  const monthData = getCurrentMonthData();
+  let added = 0;
+
+  recurring.forEach((item) => {
+    const alreadyExists = monthData.expenses.some((expense) =>
+      expense.recurringId === item.id ||
+      (
+        String(expense.name || "").trim().toLowerCase() === String(item.name || "").trim().toLowerCase() &&
+        expense.category === item.category &&
+        Number(expense.amount || 0) === Number(item.amount || 0)
+      )
+    );
+
+    if (!alreadyExists) {
+      monthData.expenses.push({
+        id: generateId(),
+        name: item.name,
+        amount: Number(item.amount || 0),
+        category: item.category,
+        recurringId: item.id,
+        createdAt: new Date().toISOString()
+      });
+      added++;
+    }
+  });
+
+  if (added > 0) {
+    monthData.initialized = true;
+    saveDatabase();
+    renderApp();
+    showToast(`${added} gasto${added === 1 ? "" : "s"} recurrente${added === 1 ? "" : "s"} agregado${added === 1 ? "" : "s"} al mes.`);
+  } else {
+    showToast("Los gastos recurrentes activos ya están en este mes.");
+  }
+}
+
+function handleRecurringListClick(event) {
+  const deleteButton = event.target.closest("[data-recurring-delete]");
+  if (!deleteButton) return;
+
+  const id = deleteButton.dataset.recurringDelete;
+  const item = normalizeRecurringExpenses().find((entry) => entry.id === id);
+  if (!item) return;
+
+  if (!window.confirm(`¿Eliminar "${item.name}" de los gastos recurrentes? Los meses anteriores no se modificarán.`)) {
+    return;
+  }
+
+  database.recurringExpenses = normalizeRecurringExpenses().filter((entry) => entry.id !== id);
+  saveDatabase();
+  renderRecurringExpenses();
+  showToast("Gasto recurrente eliminado.");
+}
+
+function handleRecurringListChange(event) {
+  const input = event.target.closest("[data-recurring-toggle]");
+  if (!input) return;
+
+  const item = normalizeRecurringExpenses().find((entry) => entry.id === input.dataset.recurringToggle);
+  if (!item) return;
+
+  item.enabled = input.checked;
+  item.updatedAt = new Date().toISOString();
+  saveDatabase();
+  renderRecurringExpenses();
+  showToast(item.enabled ? "Gasto recurrente activado." : "Gasto recurrente pausado.");
+}
 
 
 /* =========================================================
@@ -3737,7 +4047,7 @@ function saveDebt(event) {
 
   const amount =
 
-    Number(debtAmountInput.value);
+    parseCurrencyInput(debtAmountInput.value);
 
 
 
@@ -4173,8 +4483,8 @@ function prepareNewGoal() {
 function saveGoal(event) {
   event.preventDefault();
   const name = goalNameInput.value.trim();
-  const targetAmount = Number(goalTargetAmountInput.value);
-  const savedAmount = goalSavedAmountInput.value === "" ? 0 : Number(goalSavedAmountInput.value);
+  const targetAmount = parseCurrencyInput(goalTargetAmountInput.value);
+  const savedAmount = goalSavedAmountInput.value === "" ? 0 : parseCurrencyInput(goalSavedAmountInput.value);
 
   if (!name || !Number.isFinite(targetAmount) || targetAmount <= 0) {
     showToast("Ingresa un nombre y un monto objetivo válido.");
@@ -4211,7 +4521,7 @@ function editGoal(id) {
   if (!goal) return;
   goalEditId.value = goal.id;
   goalNameInput.value = goal.name;
-  goalTargetAmountInput.value = goal.targetAmount;
+  goalTargetAmountInput.value = formatCurrencyInputValue(goal.targetAmount);
   goalSavedAmountInput.value = goal.savedAmount || 0;
   goalModalEyebrow.textContent = "Editar objetivo";
   goalModalTitle.textContent = "Editar meta";
@@ -4754,6 +5064,8 @@ function renderApp() {
 
   renderHistory();
 
+  renderRecurringExpenses();
+
 }
 
 
@@ -4930,6 +5242,19 @@ usualExpenseInput.addEventListener(
 
 );
 
+if (applyRecurringExpensesButton) {
+  applyRecurringExpensesButton.addEventListener("click", applyRecurringExpenses);
+}
+
+if (applyPendingRecurringButton) {
+  applyPendingRecurringButton.addEventListener("click", applyRecurringExpenses);
+}
+
+if (recurringExpensesList) {
+  recurringExpensesList.addEventListener("click", handleRecurringListClick);
+  recurringExpensesList.addEventListener("change", handleRecurringListChange);
+}
+
 
 
 
@@ -4991,6 +5316,30 @@ startEmptyMonthButton.addEventListener(
   startEmptyMonth
 
 );
+
+if (applyRecurringFromActionsButton) {
+  applyRecurringFromActionsButton.addEventListener("click", applyRecurringExpenses);
+}
+
+if (startMonthFromZeroButton) {
+  startMonthFromZeroButton.addEventListener("click", () => {
+    const monthData = getCurrentMonthData();
+    const hasData =
+      monthData.incomes.length > 0 ||
+      monthData.expenses.length > 0;
+
+    if (hasData) {
+      showToast("Este mes ya tiene movimientos. No se modificó nada.");
+      return;
+    }
+
+    monthData.initialized = true;
+    saveDatabase();
+    renderApp();
+    showToast("Mes preparado desde cero.");
+  });
+}
+
 
 
 
@@ -5374,6 +5723,7 @@ document.addEventListener(
 
 
 
+setupCurrencyInputs();
 updateFilterButtons();
 
 

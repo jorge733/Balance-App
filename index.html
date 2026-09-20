@@ -17,9 +17,9 @@
 
   <title>Balance | Presupuesto familiar</title>
 
-  <link rel="icon" type="image/png" href="favicon.png?v=1.4.0">
-  <link rel="apple-touch-icon" href="balance-logo.png?v=1.4.0">
-  <link rel="stylesheet" href="styles.css?v=1.4.0">
+  <link rel="icon" type="image/png" href="favicon.png?v=2.0.2">
+  <link rel="apple-touch-icon" href="balance-logo.png?v=2.0.2">
+  <link rel="stylesheet" href="styles.css?v=2.0.2">
 </head>
 
 <body>
@@ -33,7 +33,7 @@
     <div class="brand">
 
       <div class="brand-icon">
-        <img src="balance-logo.png?v=1.4.0" alt="Logo de Balance">
+        <img src="balance-logo.png?v=2.0.2" alt="Logo de Balance">
       </div>
 
       <div class="brand-text">
@@ -104,6 +104,15 @@
 
     </nav>
 
+
+
+    <button id="openSyncModal" class="sync-status-button" type="button" aria-label="Configurar sincronización familiar">
+      <span class="sync-dot" id="syncDot"></span>
+      <span>
+        <small>Familia</small>
+        <strong id="syncStatusText">Sin vincular</strong>
+      </span>
+    </button>
 
     <div class="month-selector">
 
@@ -600,35 +609,73 @@
 
 
 
+
+
+      <!-- AVISO DE GASTOS RECURRENTES PENDIENTES -->
+
+      <section id="recurringPendingNotice" class="recurring-pending-notice" hidden>
+        <div class="recurring-pending-icon" aria-hidden="true">↻</div>
+        <div class="recurring-pending-content">
+          <span class="section-eyebrow">Este mes</span>
+          <h2>Gastos recurrentes pendientes</h2>
+          <p id="recurringPendingText"></p>
+        </div>
+        <button id="applyPendingRecurring" class="primary-button" type="button">
+          Agregar todos
+        </button>
+      </section>
+
+
+      <!-- GASTOS RECURRENTES -->
+
+      <section id="recurringExpensesPanel" class="recurring-section" hidden>
+        <div class="section-header recurring-header">
+          <div>
+            <span class="section-eyebrow">Automatización</span>
+            <h2>Gastos recurrentes</h2>
+            <p>Guarda los gastos que se repiten y agrégalos al mes seleccionado cuando corresponda.</p>
+          </div>
+        </div>
+        <div id="recurringExpensesList" class="recurring-list"></div>
+      </section>
+
+
       <!-- ACCIONES MES -->
 
-      <section class="month-tools">
-
-        <div>
-
-          <span class="section-eyebrow">
-            Presupuesto
-          </span>
-
-          <h2>
-            Acciones del mes
-          </h2>
-
-          <p>
-            Utiliza el presupuesto anterior como base
-            para organizar el mes seleccionado.
-          </p>
-
+      <section class="month-tools month-action-center">
+        <div class="month-action-heading">
+          <div>
+            <span class="section-eyebrow">Presupuesto</span>
+            <h2>Acciones del mes</h2>
+            <p>Elige cómo quieres preparar el presupuesto del mes seleccionado.</p>
+          </div>
         </div>
 
-        <button
-          id="copyMonthButton"
-          class="secondary-button"
-          type="button"
-        >
-          Copiar mes anterior
-        </button>
+        <div class="month-action-grid">
+          <button id="copyMonthButton" class="month-action-card" type="button">
+            <span class="month-action-icon">←</span>
+            <span class="month-action-copy">
+              <strong>Copiar mes anterior</strong>
+              <small>Trae los ingresos y gastos del mes anterior.</small>
+            </span>
+          </button>
 
+          <button id="applyRecurringFromActions" class="month-action-card" type="button">
+            <span class="month-action-icon">↻</span>
+            <span class="month-action-copy">
+              <strong>Agregar gastos recurrentes</strong>
+              <small>Incorpora solamente los recurrentes que todavía falten.</small>
+            </span>
+          </button>
+
+          <button id="startMonthFromZero" class="month-action-card" type="button">
+            <span class="month-action-icon">＋</span>
+            <span class="month-action-copy">
+              <strong>Comenzar desde cero</strong>
+              <small>Prepara el mes sin copiar ingresos ni gastos anteriores.</small>
+            </span>
+          </button>
+        </div>
       </section>
 
     </div>
@@ -1196,10 +1243,8 @@
 
             <input
               id="incomeAmount"
-              type="number"
-              min="0"
-              step="1"
-              inputmode="numeric"
+              type="text"
+              inputmode="numeric" autocomplete="off" data-currency-input
               placeholder="0"
               required
             >
@@ -1207,9 +1252,7 @@
           </div>
 
         </div>
-
-
-        <div class="modal-actions">
+<div class="modal-actions">
 
           <button
             class="secondary-button"
@@ -1468,10 +1511,8 @@
 
             <input
               id="expenseAmount"
-              type="number"
-              min="0"
-              step="1"
-              inputmode="numeric"
+              type="text"
+              inputmode="numeric" autocomplete="off" data-currency-input
               placeholder="0"
               required
             >
@@ -1481,7 +1522,16 @@
         </div>
 
 
-        <div class="modal-actions">
+        
+        <label class="recurring-check">
+          <input id="recurringExpense" type="checkbox">
+          <span>
+            <strong>Repetir todos los meses</strong>
+            <small>Guarda este gasto como recurrente. Tú decides cuándo aplicarlo a cada mes.</small>
+          </span>
+        </label>
+
+<div class="modal-actions">
 
           <button
             class="secondary-button"
@@ -1635,10 +1685,8 @@
 
             <input
               id="debtAmount"
-              type="number"
-              min="0"
-              step="1"
-              inputmode="numeric"
+              type="text"
+              inputmode="numeric" autocomplete="off" data-currency-input
               placeholder="0"
               required
             >
@@ -1660,10 +1708,8 @@
 
             <input
               id="debtMonthlyPayment"
-              type="number"
-              min="0"
-              step="1"
-              inputmode="numeric"
+              type="text"
+              inputmode="numeric" autocomplete="off" data-currency-input
               placeholder="0"
             >
 
@@ -1777,10 +1823,8 @@
             <span>$</span>
             <input
               id="goalTargetAmount"
-              type="number"
-              min="1"
-              step="1"
-              inputmode="numeric"
+              type="text"
+              inputmode="numeric" autocomplete="off" data-currency-input
               placeholder="0"
               required
             >
@@ -1793,10 +1837,8 @@
             <span>$</span>
             <input
               id="goalSavedAmount"
-              type="number"
-              min="0"
-              step="1"
-              inputmode="numeric"
+              type="text"
+              inputmode="numeric" autocomplete="off" data-currency-input
               placeholder="0"
             >
           </div>
@@ -1982,7 +2024,69 @@
   ></div>
 
 
-  <script src="app.js?v=1.4.0"></script>
+  <script src="app.js?v=2.0.2"></script>
 
+
+  <!-- SINCRONIZACIÓN FAMILIAR -->
+  <div id="syncModal" class="modal-overlay" hidden>
+    <section class="modal sync-modal" role="dialog" aria-modal="true" aria-labelledby="syncModalTitle">
+      <button id="closeSyncModal" class="modal-close" type="button" aria-label="Cerrar">×</button>
+
+      <span class="section-eyebrow">Balance familiar</span>
+      <h2 id="syncModalTitle">Sincronización</h2>
+      <p class="sync-intro">
+        Comparte el mismo presupuesto entre computadores y celulares usando un código familiar privado.
+      </p>
+
+      <div id="syncDisconnected">
+        <div class="sync-choice-grid">
+          <button id="createFamilyButton" class="sync-choice-card" type="button">
+            <span class="sync-choice-icon">＋</span>
+            <strong>Crear familia</strong>
+            <small>Genera un código nuevo y sube los datos actuales de este dispositivo.</small>
+          </button>
+
+          <button id="showJoinFamilyButton" class="sync-choice-card" type="button">
+            <span class="sync-choice-icon">↗</span>
+            <strong>Unirme con un código</strong>
+            <small>Vincula este dispositivo a un presupuesto familiar existente.</small>
+          </button>
+        </div>
+
+        <form id="joinFamilyForm" class="join-family-form" hidden>
+          <label for="familyCodeInput">Código familiar</label>
+          <input id="familyCodeInput" type="text" autocomplete="off" spellcheck="false"
+                 placeholder="Ej. 7KFM-92PX-Q4RT-W8NC-J5HV" maxlength="29">
+          <small>Escribe el código exactamente como aparece en el otro dispositivo.</small>
+          <button class="primary-button" type="submit">Vincular este dispositivo</button>
+        </form>
+      </div>
+
+      <div id="syncConnected" hidden>
+        <div class="family-code-box">
+          <span>Código familiar</span>
+          <strong id="familyCodeDisplay">—</strong>
+          <button id="copyFamilyCode" class="secondary-button" type="button">Copiar código</button>
+        </div>
+
+        <div class="sync-connected-state">
+          <span class="sync-connected-icon">✓</span>
+          <div>
+            <strong>Sincronización activa</strong>
+            <p id="syncConnectedMessage">Los cambios se guardan en Firebase automáticamente.</p>
+          </div>
+        </div>
+
+        <button id="disconnectFamilyButton" class="sync-danger-button" type="button">
+          Desvincular este dispositivo
+        </button>
+      </div>
+
+      <p id="syncFeedback" class="sync-feedback" aria-live="polite"></p>
+    </section>
+  </div>
+
+
+  <script type="module" src="firebase-sync.js?v=2.0.2"></script>
 </body>
 </html>

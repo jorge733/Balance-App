@@ -1,0 +1,30 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Cada código familiar funciona como un secreto de acceso.
+    // No se permite listar familias; solo abrir una familia conociendo
+    // exactamente su código aleatorio de 20 caracteres.
+    match /families/{familyCode} {
+      allow get: if request.auth != null;
+      allow list: if false;
+
+      allow create: if request.auth != null
+                    && familyCode.size() == 20
+                    && request.resource.data.version == 2
+                    && request.resource.data.data is map;
+
+      allow update: if request.auth != null
+                    && familyCode.size() == 20
+                    && request.resource.data.version == 2
+                    && request.resource.data.data is map;
+
+      allow delete: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
